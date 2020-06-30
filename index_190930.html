@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript">
+	    // ref:
+		// http://www.tutorialspoint.com/html5/html5_websocket.htm  
+        // http://www.w3schools.com/js/js_input_examples.asp
+		//alert("WebSocket is supported by your Browser!");
+               
+        // Let us open a web socket
+     // var ws = new WebSocket("ws://127.0.0.1:8089");		
+        var ws = new WebSocket("ws://192.168.190.232:8089");		
+				
+        ws.onopen = function(evt)
+        {
+            // Web Socket is connected, send data using send()
+            var msg = {"msg":"Hello from client!"}
+            wsSend(msg);
+            //alert("Message is sent...");
+			console.log("Connection established.");
+        };
+				
+        ws.onmessage = function (evt) 
+        { 
+            var received_msg = evt.data;
+		    //var arr = JSON.parse(evt.data);
+	        console.log("Msg received: " + received_msg);
+			document.getElementById("serverReply").innerHTML = received_msg;
+            //alert("Message is received...");
+        };
+		
+		function Send()
+		{
+            var frm = document.getElementById("frmSend");							
+			console.log("frm.msg.value: " + frm.msg.value);
+			var smsg = frm.msg.value;
+			console.log("smsg: " + smsg);
+			ws.send(smsg);
+			document.getElementById("clientSent").innerHTML = smsg;
+        };
+		
+		function getPlcData()
+		{
+			wsSend({"getPlcData":""});
+		}
+		
+		function setTcmData()
+		{
+			var msg = {"setTcmData": {"tcmId": 3, "pitch": 0,  "speed" :  5, "timeSet": 119, "cargoAfter": 1, "cargoBefore": 1, "washMedia": 1, "angleMax":45, "angleMin":12, "isSet":1}}
+			wsSend(msg);
+		}
+		function getTcmData()
+		{
+			var msg = {"getTcmData": {"tcmId": 3}}
+			wsSend(msg);
+		}
+		function getTcmLiveData()
+		{
+			var msg = {"getTcmLiveData": {"tcmId": 3}}
+			wsSend(msg);
+		}
+		function getReportData()
+		{
+			var msg = {"getReportData": {"vessel": 1}}
+			wsSend(msg);
+		}
+		function initTcmData()
+		{
+			var msg = {"iniTcmData": {}}
+			wsSend(msg);
+		}
+		function setTcmSubscriptionOn()
+		{
+			var msg = {"setTcmSubscriptionOn": {"tcmId": 0}}
+			wsSend(msg);
+		}
+		function setTcmSubscriptionOff()
+		{
+			var msg = {"setTcmSubscriptionOff": {"tcmId": 0}}
+			wsSend(msg);
+		}
+		function getKslTankData()
+		{
+			var msg = {"getKslTankData": {"vessel": 1}}
+			wsSend(msg);
+		}
+		function getShipData()
+		{
+			var msg = {"getShipData": {"vessel": 1}}
+			wsSend(msg);
+		}
+		function getTankSettingsData()
+		{
+			var msg = {"getTankSettingsData": {"tankId": 3}}
+			wsSend(msg);
+		}
+		function getDraftSettingsData()
+		{
+			var msg = {"getDraftSettingsData": {"draftId": 2}}
+			wsSend(msg);
+		}
+		function getMeasuringPointsSettingsData()
+		{
+			var msg = {"getMeasuringPointsSettingsData": {"tankId": 3}}
+			wsSend(msg);
+		}
+		function setTankSubscriptionOn()
+		{
+			var msg = {"setTankSubscriptionOn": {"tankId": 0}}
+			wsSend(msg);
+		}
+		function setTankSubscriptionOff()
+		{
+			var msg = {"setTankSubscriptionOff": {"tankId": 0}}
+			wsSend(msg);
+		}
+		function setDraftSubscriptionOn()
+		{
+			var msg = {"setDraftSubscriptionOn": {"draftId": 0}}
+			wsSend(msg);
+		}
+		function setDraftSubscriptionOff()
+		{
+			var msg = {"setDraftSubscriptionOff": {"draftId": 0}}
+			wsSend(msg);
+		}
+		function getSeaWaterDensity()
+		{
+			var msg = {"getSeaWaterDensity": {}}
+			wsSend(msg);
+		}	
+		function setSeaWaterDensity()
+		{
+			var msg = {"setSeaWaterDensity": {"SWDensity": 1.234}}
+			wsSend(msg);
+		}		
+		function setDensity()
+		{
+			var msg = {"setDensity": {"tankId": 3, "density": 1.0567}}
+			wsSend(msg);
+		}		
+		function setLevelAlarm()
+		{
+			var msg = {"setLevelAlarm": {"tankId": 2, "HA": 4.2, "LA": 1.3}}
+			wsSend(msg);
+		}		
+		function setLevelAlarmPct()
+		{
+			var msg = {"setLevelAlarmPct": {"tankId": 4, "HAP": 80, "LAP": 20}}
+			wsSend(msg);
+		}		
+		function setSaveLevelConfiguration()
+		{
+			var msg = {"setSaveLevelConfiguration": {}}
+			wsSend(msg);
+		}		
+		function getAlarmList()
+		{
+			var msg = {"getAlarmList": {}}
+			wsSend(msg);
+		}		
+		function setAlarmAccept()
+		{
+			var msg = {"setAlarmAccept": {"tankId": 5}}
+			wsSend(msg);
+		}	
+		function setTankCF()
+		{
+			var msg = {"setTankCF": {"tankId": 6, "AP_LCF": 1.1, "CL_TCF": 1.2}}
+			wsSend(msg);
+		}
+		function setLevelMP()
+		{
+			var msg = {"setLevelMP": {"tankId": 6, "AP_MP": 1.5, "CL_MP": 1.6}}
+			wsSend(msg);
+		}
+		function setLevelMechOffs()
+		{
+			var msg = {"setLevelMechOffs": {"tankId": 6, "mechoff1": 0.5, "mechoff2": 0.6}}
+			wsSend(msg);
+		}
+		function setDensityMechOffs()
+		{
+			var msg = {"setDensityMechOffs": {"tankId": 6, "mechoff1": 0.9, "mechoff2": 1.3}}
+			wsSend(msg);
+		}								
+		function setDraftCF()
+		{
+			var msg = {"setDraftCF": {"draftId": 2, "AP_LCF": 1.3, "CL_TCF": 1.4}}
+			wsSend(msg);
+		}
+		function setDraftMP()
+		{
+			var msg = {"setDraftMP": {"draftId": 2, "AP_MP": 1.7, "CL_MP": 1.8}}
+			wsSend(msg);
+		}
+		function setDraftMechOffs()
+		{
+			var msg = {"setDraftMechOffs": {"draftId": 1, "mechoff": 2.9}}
+			wsSend(msg);
+		}
+		function getLevelLinearizationTables()
+		{
+			var msg = {"getLevelLinearizationTables": {"tankId": 2}}
+			wsSend(msg);
+		}		
+		function getDraftLinearizationTable()
+		{
+			var msg = {"getDraftLinearizationTable": {"draftId": 2}}
+			wsSend(msg);
+		}
+		function setLevelLinearizationTables()
+		{
+			var msg = {"setLevelLinearizationTables":{"tankId":1,"x1A":0.0,"y1A":0.0,"x2A":0.0,"y2A":0.0,"x3A":0.0,"y3A":0.0,"x4A":0.0,"y4A":0.0,"x5A":0.0,"y5A":0.0,"x6A":100000.0,"y6A":100000.0,"x1B":-100000.0,"y1B":-100000.0,"x2B":-31.0,"y2B":-31.0,"x3B":-30.0,"y3B":0.0,"x4B":30.0,"y4B":0.0,"x5B":30.0,"y5B":31.0,"x6B":100000.0,"y6B":100000.0}}
+			wsSend(msg);
+		}		
+		function setDraftLinearizationTable()
+		{
+			var msg = {"setDraftLinearizationTable":{"draftId":1,"x1":0.0,"y1":0.0,"x2":0.0,"y2":0.0,"x3":0.0,"y3":0.0,"x4":0.0,"y4":0.0,"x5":0.0,"y5":0.0,"x6":100000.0,"y6":100000.0}}
+			wsSend(msg);
+		}
+		function setLevelOffset()
+		{
+			var msg = {"setLevelOffset": {"tankId": 7, "offset1": 0.111, "offset2": 0.112}}
+			wsSend(msg);
+		}
+		function setDensityOffset()
+		{
+			var msg = {"setDensityOffset": {"tankId": 8, "offset1": 0.211, "offset2": 0.212}}
+			wsSend(msg);
+		}
+		function setDraftOffset()
+		{
+			var msg = {"setDraftOffset": {"draftId": 2, "offset": 0.311}}
+			wsSend(msg);
+		}
+		function setLevelGain()
+		{
+			var msg = {"setLevelGain": {"tankId": 9, "gain1": 1.411, "gain2": 1.412}}
+			wsSend(msg);
+		}
+		function setDensityGain()
+		{
+			var msg = {"setDensityGain": {"tankId": 10, "gain1": 1.511, "gain2": 1.512}}
+			wsSend(msg);
+		}
+		function setDraftGain()
+		{
+			var msg = {"setDraftGain": {"draftId": 2, "gain": 1.611}}
+			wsSend(msg);
+		}
+		function setLevelRawInput()
+		{
+			var msg = {"setLevelRawInput": {"tankId": 11, "rawInput1": 1711, "rawInput2": 1712}}
+			wsSend(msg);
+		}
+		function setDensityRawInput()
+		{
+			var msg = {"setDensityRawInput": {"tankId": 12, "rawInput1": 1811, "rawInput2": 1812}}
+			wsSend(msg);
+		}
+		function setDraftRawInput()
+		{
+			var msg = {"setDraftRawInput": {"draftId": 2, "rawInput": 1911}}
+			wsSend(msg);
+		}				
+		function getSmPlcData()
+		{
+			wsSend({"getSmPlcData":""});
+		}		
+		function setSmPlcRegister6A()
+		{
+			var msg = {"setSmPlcRegister": {"registerId": 6, "value": 6666}}
+			wsSend(msg);
+		}
+		function setSmPlcRegister6B()
+		{
+			var msg = {"setSmPlcRegister": {"registerId": 6, "value": 7777}}
+			wsSend(msg);
+		}
+		function setRunningMode_Offline()
+		{
+			var msg = {"setRunningMode": {"tcmId": 3, "offlineTCM": 1, "offlineRpm" : 1500, "offlineRpmAvg": 1515}}
+			wsSend(msg);
+		}		
+		function setRunningMode_Online()
+		{
+			var msg = {"setRunningMode": {"tcmId": 3, "offlineTCM": 0, "offlineRpm" : 0, "offlineRpmAvg": 0}}
+			wsSend(msg);
+		}		
+		function setSmValveRuntimeData()
+		{
+			var msg = {"setSmValveRuntimeData": {"id": 3, "setPos": 9999,  "command": 5}}
+			wsSend(msg);
+		}
+		function setSmValve1RuntimeDataOpen()
+		{
+			var msg = {"setSmValveRuntimeData": {"id": 1, "setPos": 10000,  "command": 1}}
+			wsSend(msg);
+		}
+		function setSmPump1RuntimeDataStart()
+		{
+			var msg = {"setSmPumpRuntimeData": {"id": 1, "setPoint": 10000,  "command": 1}}
+			wsSend(msg);
+		}
+		function setSmPump2RuntimeDataStart()
+		{
+			var msg = {"setSmPumpRuntimeData": {"id": 2, "setPoint": 10000,  "command": 1}}
+			wsSend(msg);
+		}
+		function setSmValve1RuntimeDataClose()
+		{
+			var msg = {"setSmValveRuntimeData": {"id": 1, "setPos": 0,  "command": 2}}
+			wsSend(msg);
+		}
+		function setSmPump1RuntimeDataStop()
+		{
+			var msg = {"setSmPumpRuntimeData": {"id": 1, "setPoint": 0,  "command": 2}}
+			wsSend(msg);
+		}
+		function setSmPump2RuntimeDataStop()
+		{
+			var msg = {"setSmPumpRuntimeData": {"id": 2, "setPoint": 0,  "command": 2}}
+			wsSend(msg);
+		}
+		function setSmValve2RuntimeDataOpen()
+		{
+			var msg = {"setSmValveRuntimeData": {"id": 2, "setPos": 10000,  "command": 1}}
+			wsSend(msg);
+		}
+		function setSmValve2RuntimeDataClose()
+		{
+			var msg = {"setSmValveRuntimeData": {"id": 2, "setPos": 0,  "command": 2}}
+			wsSend(msg);
+		}
+		function setSmValve3RuntimeDataOpen()
+		{
+			var msg = {"setSmValveRuntimeData": {"id": 3, "setPos": 5000,  "command": 1}}
+			wsSend(msg);
+		}
+		function setSmValve3RuntimeDataClose()
+		{
+			var msg = {"setSmValveRuntimeData": {"id": 3, "setPos": 1,  "command": 2}}
+			wsSend(msg);
+		}
+		function setSmValve4RuntimeDataOpen()
+		{
+			var msg = {"setSmValveRuntimeData": {"id":4, "setPos": 10000,  "command": 1}}
+			wsSend(msg);
+		}
+		function setSmValve4RuntimeDataClose()
+		{
+			var msg = {"setSmValveRuntimeData": {"id": 4, "setPos": 1,  "command": 2}}
+			wsSend(msg);
+		}
+		function setSmValveSubscriptionOn()
+		{
+			var msg = {"setSmValveSubscriptionOn": {"id": 0}}
+			wsSend(msg);
+		}
+		function setSmValveSubscriptionOff()
+		{
+			var msg = {"setSmValveSubscriptionOff": {"id": 0}}
+			wsSend(msg);
+		}
+		function setSmPumpSubscriptionOn()
+		{
+			var msg = {"setSmPumpSubscriptionOn": {"id": 0}}
+			wsSend(msg);
+		}
+		function setSmPumpSubscriptionOff()
+		{
+			var msg = {"setSmPumpSubscriptionOff": {"id": 0}}
+			wsSend(msg);
+		}
+		function getSmPump1SetupData()
+		{
+			var msg = {"getSmPumpSetupData": {"id": 1}}
+			wsSend(msg);
+		}
+		function setSmPump1SetupData()
+		{
+			var msg = {"setSmPumpSetupData":{"id":1,"type":2,"subType":1,"errorTimeout":30,"gainGeneral":100.0,"offsetGeneral":0.0,"emeStopHwAddr":1,"setRevsHwAddr":2,"increaseHwAddr":3,"decreaseHwAddr":4,"getRevsHwAddr":5,"localRemHwAddr":6,"startHwAddr":7,"stopHwAddr":8,"getPressOutlHwAddr":9,"getPressInlHwAddr":10,"PIDGain":100.0,"PIDIntegration":1.0,"PIDDerivation":1.0,"startedHwAddr":10,"stoppedHwAddr":11}}
+			wsSend(msg);
+		}
+		function getSmPump2SetupData()
+		{
+			var msg = {"getSmPumpSetupData": {"id": 2}}
+			wsSend(msg);
+		}
+		function setSmPump2SetupData()
+		{
+			var msg = {"setSmPumpSetupData":{"id":2,"type":1,"subType":48,"errorTimeout":10,"gainGeneral":100.0,"offsetGeneral":0.0,"emeStopHwAddr":14,"setRevsHwAddr":65535,"increaseHwAddr":65535,"decreaseHwAddr":65535,"getRevsHwAddr":65535,"localRemHwAddr":13,"startHwAddr":10,"stopHwAddr":11,"getPressOutlHwAddr":65535,"getPressInlHwAddr":65535,"PIDGain":100.0,"PIDIntegration":1.0,"PIDDerivation":1.0,"startedHwAddr":10,"stoppedHwAddr":11}}
+			wsSend(msg);
+		}
+		function getSmValve1SetupData()
+		{
+			var msg = {"getSmValveSetupData": {"id": 1}}
+			wsSend(msg);
+		}
+		function setSmValve1SetupData()
+		{
+			var msg = {"setSmValveSetupData":{"id":1,"type":1,"subType":14,"errorTimeout":60,"settlingTimeOpen":0,"settlingTimeClose":0,"gain":100.0,"offset":0.0,"openTime":0,"closeTime":0,"lsOpenHwAddr":0,"lsCloseHwAddr":1,"getPositionHwAddr":0,"solOpenHwAddr":0,"solCloseHwAddr":1,"setPositionHwAddr":0}}
+			wsSend(msg);
+		}
+		function getSmValve2SetupData()
+		{
+			var msg = {"getSmValveSetupData": {"id": 2}}
+			wsSend(msg);
+		}
+		function setSmValve2SetupData()
+		{
+			var msg = {"setSmValveSetupData":{"id":2,"type":1,"subType":13,"errorTimeout":30,"settlingTimeOpen":0,"settlingTimeClose":0,"gain":100.0,"offset":0.0,"openTime":0,"closeTime":0,"lsOpenHwAddr":2,"lsCloseHwAddr":3,"getPositionHwAddr":0,"solOpenHwAddr":1,"solCloseHwAddr":0,"setPositionHwAddr":0}}
+			wsSend(msg);
+		}
+		function getSmValve3SetupData()
+		{
+			var msg = {"getSmValveSetupData": {"id": 3}}
+			wsSend(msg);
+		}
+		function setSmValve3SetupData()
+		{
+			var msg = {"setSmValveSetupData":{"id":3,"type":2,"subType":16,"errorTimeout":100,"settlingTimeOpen":0,"settlingTimeClose":0,"gain":100.0,"offset":0.0,"openTime":0,"closeTime":0,"lsOpenHwAddr":0,"lsCloseHwAddr":0,"getPositionHwAddr":0,"solOpenHwAddr":0,"solCloseHwAddr":0,"setPositionHwAddr":0}}
+			wsSend(msg);
+		}
+		function getSmValve4SetupData()
+		{
+			var msg = {"getSmValveSetupData": {"id": 4}}
+			wsSend(msg);
+		}
+		function setSmValve4SetupData()
+		{
+			var msg = {"setSmValveSetupData":{"id":4,"type":4,"subType":65535,"errorTimeout":65535,"settlingTimeOpen":65535,"settlingTimeClose":65535,"gain":1.0,"offset":0.0,"openTime":65535,"closeTime":65535,"lsOpenHwAddr":9,"lsCloseHwAddr":65535,"getPositionHwAddr":65535,"solOpenHwAddr":65535,"solCloseHwAddr":65535,"setPositionHwAddr":65535}}
+			wsSend(msg);
+		}
+		function initSmPLC()
+		{
+			var msg = {"initSmPLC": {}}
+			wsSend(msg);
+		}
+		function setAcceptLevelSensors()
+		{
+			var msg = {"setAcceptLevelSensors": {}}
+			wsSend(msg);
+		}		
+		function getMoteData()
+		{
+			var msg = {"getMoteData": {"vessel": 1}}
+			wsSend(msg);
+		}
+		function setMoteDigitalOutputOn()
+		{
+			var msg = {"setMoteDigitalOutput": {"moteId":1,"moteMAC":"00:17:0D:00:00:31:C8:22","moteDigOutAdress":2,"moteDigOutValue":1}}
+			wsSend(msg);
+		}
+		function setMoteDigitalOutputOff()
+		{
+			var msg = {"setMoteDigitalOutput": {"moteId":1,"moteMAC":"00:17:0D:00:00:31:C8:22","moteDigOutAdress":2,"moteDigOutValue":0}}
+			wsSend(msg);
+		}
+		function setMeshActivate()
+		{
+			var msg = {"setMeshControl": {"Control":1}}
+			wsSend(msg);
+		}
+		function setMeshReset()
+		{
+			var msg = {"setMeshControl": {"Control":2}}
+			wsSend(msg);
+		}
+		function setTcmMac()
+		{
+			var msg = {"setTcmMac": [{"tcmId":1,"moteMac":"00:17:0D:00:00:31:C8:2C"},{"tcmId":2,"moteMac":"00:17:0D:00:00:31:C8:2D"}]}
+			wsSend(msg);
+		}
+		function getSmAllValvesSetupData()
+		{
+			var msg = {"getSmAllValvesSetupData": {"vessel": 1}}
+			wsSend(msg);
+		}
+		function getSmAllPumpsSetupData()
+		{
+			var msg = {"getSmAllPumpsSetupData": {"vessel": 1}}
+			wsSend(msg);
+		}
+		function setSmPumpAlarmSetup()
+		{
+			var msg = {"setSmPumpSetupData":{"id":4,"type":4,"subType":5,"errorTimeout":30,"gainGeneral":100.0,"offsetGeneral":0.0,"emeStopHwAddr":1,"setRevsHwAddr":2,"increaseHwAddr":3,"decreaseHwAddr":4,"getRevsHwAddr":5,"localRemHwAddr":6,"startHwAddr":120,"stopHwAddr":65535,"getPressOutlHwAddr":9,"getPressInlHwAddr":10,"PIDGain":100.0,"PIDIntegration":1.0,"PIDDerivation":1.0,"startedHwAddr":10,"stoppedHwAddr":11}}
+			wsSend(msg);
+		}
+		function setSmPumpAlarmTrig()
+		{
+			var msg = {"setSmPumpRuntimeData": {"id": 4, "setPoint": 0,  "command": 1}}
+			wsSend(msg);
+		}
+		function setSmPumpAlarmReset()
+		{	
+			var msg = {"setSmPumpRuntimeData": {"id": 4, "setPoint": 0,  "command": 2}}
+			wsSend(msg);
+		}
+		function sleep(milliseconds) {
+		var start = new Date().getTime();
+		for (var i = 0; i < 1e7; i++) {
+			if ((new Date().getTime() - start) > milliseconds){
+				break;
+				}
+			}
+		}
+		function restartManager()
+		{
+			var msg = {"restartManager": {}}
+			wsSend(msg);
+		}		
+		function wsSend(smsg)
+		{
+			//var smsg = {"msg":"to server"};
+			var msgJson = JSON.stringify(smsg);
+			console.log("Sending: " + msgJson);
+			ws.send(msgJson);
+			document.getElementById("clientSent").innerHTML = msgJson;
+		};
+				
+        ws.onclose = function()
+        { 
+            // websocket is closed.
+            //alert("Connection is closed...");
+            console.log("Connection closed");				  
+        };
+      </script>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 800px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<h2>Websocket Test Client</h2>
+<p><form id="frmSend">
+         <input type="text" size=100 name="msg" id="msg" value={"setAlarmAccept":{"tankId":2}} />
+         <input type="button" onclick='Send()' value="Send" />
+         <input type="button" onclick='restartManager()' value="Restart Manager" style="margin-left: 120px"/>
+         <br>
+		 <br>
+		 </form>
+<div class="row">
+  <div class="column" style="background-color:#aaa;">
+    <h2>Levelmaster</h2>
+    <p>
+         <input type="button" onclick='getShipData()' value="Get Ship Data" />
+         <br>
+         <input type="button" onclick='getKslTankData()' value="Get All Tank Data from KSL" />
+         <br>
+         <input type="button" onclick='getTankSettingsData()' value="Get Tank #3 Settings Data" />
+         <input type="button" onclick='getDraftSettingsData()' value="Get Draft #2 Settings Data" />
+         <br>
+         <input type="button" onclick='getMeasuringPointsSettingsData()' value="Get Tank #3 Measuring Points Settings Data" />         
+		 <br>
+         <input type="button" onclick='setTankSubscriptionOn()' value="Subscribe to Tanks LIVE data" />
+         <input type="button" onclick='setTankSubscriptionOff()' value="Unsubscribe to Tanks LIVE data" />
+         <br>
+         <input type="button" onclick='setDraftSubscriptionOn()' value="Subscribe to Drafts & T/H LIVE data" />
+         <input type="button" onclick='setDraftSubscriptionOff()' value="Unsubscribe to Drafts & T/H LIVE data" />
+         <br>
+         <input type="button" onclick='getSeaWaterDensity()' value="Get Sea water density" />
+         <input type="button" onclick='setSeaWaterDensity()' value="Set Sea water density to 1.234" />
+         <br>
+         <input type="button" onclick='setDensity()' value="Set Tank #3 Density to 1.0567" />
+         <br>
+         <input type="button" onclick='setLevelAlarm()' value="Set Tank #2 HA to 4.2 and LA to 1.3" />
+         <input type="button" onclick='setLevelAlarmPct()' value="Set Tank #4 HA to 80% and LA to 20%" />
+         <input type="button" onclick='setTankCF()' value="Set CF for Tank #6 to 1.1 & 1.2" />
+         <br>
+         <input type="button" onclick='setLevelMP()' value="Set Level MP for Tank #6 to 1.5 & 1.6" />
+         <input type="button" onclick='setLevelMechOffs()' value="Set Level Mech Offset for Tank #6 to 0.5 & 0.6" />
+         <br>
+         <input type="button" onclick='setDensityMechOffs()' value="Set Density Mech Offset for Tank #6 to 0.9 & 1.3" />
+         <br>
+         <input type="button" onclick='setDraftCF()' value="Set CF for Draft #2 to 1.3 & 1.4" />
+         <input type="button" onclick='setDraftMP()' value="Set MP for Draft #2 to 1.7 & 1.8" />
+         <input type="button" onclick='setDraftMechOffs()' value="Set Draft Mech Offset for Draft #1 to 2.9" />
+         <br>
+         <input type="button" onclick='getLevelLinearizationTables()' value="Get Tank #2 Linearization Tables" />
+         <input type="button" onclick='getDraftLinearizationTable()' value="Get Draft #2 Linearization Table" />
+         <input type="button" onclick='setLevelLinearizationTables()' value="Set Tank #1 Linearization Tables" />
+         <input type="button" onclick='setDraftLinearizationTable()' value="Set Draft #1 Linearization Table" />
+         <br>
+         <input type="button" onclick='setLevelOffset()' value="Set Level Offset for Tank #7 to 0.111 & 0.112" />
+         <input type="button" onclick='setDensityOffset()' value="Set Density Offset for Tank #8 to 0.211 & 0.212" />
+         <input type="button" onclick='setDraftOffset()' value="Set Draft Offset for Draft #2 to 0.311" />
+         <br>
+         <input type="button" onclick='setLevelGain()' value="Set Level Gain for Tank #9 to 1.411 & 1.412" />
+         <input type="button" onclick='setDensityGain()' value="Set Density Gain for Tank #10 to 1.511 & 1.512" />
+         <input type="button" onclick='setDraftGain()' value="Set Draft Gain for Draft #2 to 1.611" />
+         <br>
+         <input type="button" onclick='setLevelRawInput()' value="Set Level RawInput for Tank #11 to 1711 & 1712" />
+         <input type="button" onclick='setDensityRawInput()' value="Set Density RawInput for Tank #12 to 1811 & 1812" />
+         <input type="button" onclick='setDraftRawInput()' value="Set Draft RawInput for Draft #2 to 1911" />
+         <br>
+         <input type="button" onclick='getAlarmList()' value="Get Unaccepted Alarm List from KSL450" />
+         <br>
+         <input type="button" onclick='setAlarmAccept()' value="Accept Alarm for Tank #5" />
+         <br>
+         <input type="button" onclick='setAcceptLevelSensors()' value="Accept Sensors in KSL450" />         
+		 <br>
+         <input type="button" onclick='setSaveLevelConfiguration()' value="Save configuration in KSL450" />
+    </p>
+  </div>
+  <div class="column" style="background-color:#aaa;">
+    <h2>Washmaster</h2>
+    <p>
+         <input type="button" onclick='getPlcData()' value="Get PLC data" />
+		 <input type="button" onclick='initTcmData()' value="Init TCM data" />
+		 <br>
+         <input type="button" onclick='getTcmData()' value="Get TCM data" />
+         <input type="button" onclick='setTcmData()' value="Set TCM data" />
+         <input type="button" onclick='getTcmLiveData()' value="Get TCM LIVE data" />
+         <input type="button" onclick='getReportData()' value="Get Report data" />
+         <br>
+         <input type="button" onclick='setTcmSubscriptionOn()' value="Subscribe to TCM LIVE data" />
+         <input type="button" onclick='setTcmSubscriptionOff()' value="Unsubscribe to TCM LIVE data" />
+         <br>
+         <input type="button" onclick='setRunningMode_Offline()' value="TCM #3 Offline rpm=1500 rpmavg=1515" />
+         <input type="button" onclick='setRunningMode_Online()' value="TCM #3 Online" />
+         <br>
+         <input type="button" onclick='getMoteData()' value="Get Mote Data" />
+         <input type="button" onclick='setMoteDigitalOutputOn()' value="Set Indicator On" />
+         <input type="button" onclick='setMoteDigitalOutputOff()' value="Set Indicator Off" />
+         <input type="button" onclick='setMeshActivate()' value="Set Mesh Activate" />
+         <input type="button" onclick='setMeshReset()' value="Set Mesh Reset" />
+         <input type="button" onclick='setTcmMac()' value="Set Tcm MAC" />
+    </p>
+    <h2>Shipmaster</h2>
+	<p>
+    <input type="button" onclick='getSmPlcData()' value="Get SmPLC setup registers" />
+         <input type="button" onclick='initSmPLC()' value="Init SmPLC" />
+         <br>
+         <input type="button" onclick='setSmValveSubscriptionOn()' value="Subscribe to Valve Runtime Data" />
+	     <input type="button" onclick='setSmValveSubscriptionOff()' value="Unsubscribe to Valve Runtime Data" />
+         <br>
+		 <input type="button" onclick='setSmPumpSubscriptionOn()' value="Subscribe to Pump Runtime Data" />
+	     <input type="button" onclick='setSmPumpSubscriptionOff()' value="Unsubscribe to Pump Runtime Data" />
+         <br>
+         <input type="button" onclick=' getSmValve1SetupData()' value="Get Setup Data for Valve #1" />
+         <input type="button" onclick=' setSmValve1SetupData()' value="Set Setup Data for Valve #1" />
+         <br>
+         <input type="button" onclick=' getSmValve2SetupData()' value="Get Setup Data for Valve #2" />
+         <input type="button" onclick=' setSmValve2SetupData()' value="Set Setup Data for Valve #2" />
+         <br>
+         <input type="button" onclick=' getSmValve3SetupData()' value="Get Setup Data for Valve #3" />
+         <input type="button" onclick=' setSmValve3SetupData()' value="Set Setup Data for Valve #3" />
+         <br>
+         <input type="button" onclick=' getSmValve4SetupData()' value="Get Setup Data for Switch #1 (Valve #4)" />
+         <input type="button" onclick=' setSmValve4SetupData()' value="Set Setup Data for Switch #1 (Valve #4)" />
+         <br>
+         <input type="button" onclick=' getSmPump1SetupData()' value="Get Setup Data for Pump #1" />
+         <input type="button" onclick=' setSmPump1SetupData()' value="Set Setup Data for Pump #1" />
+         <br>
+         <input type="button" onclick=' getSmPump2SetupData()' value="Get Setup Data for Pump #2" />
+         <input type="button" onclick=' setSmPump2SetupData()' value="Set Setup Data for Pump #2" />
+         <br>
+         <input type="button" onclick='setSmValve1RuntimeDataOpen()' value="Set Valve #1 pos to 100.00% and command to 1 (open)" />
+         <input type="button" onclick='setSmValve1RuntimeDataClose()' value="Set Valve #1 pos to 0.00% and command to 2 (close)" />
+         <br>
+         <input type="button" onclick='setSmValve2RuntimeDataOpen()' value="Set Valve #2 pos to 100.00% and command to 1 (open)" />
+         <input type="button" onclick='setSmValve2RuntimeDataClose()' value="Set Valve #2 pos to 0% and command to 2 (close)" />
+         <br>
+         <input type="button" onclick='setSmValve3RuntimeDataOpen()' value="Set Valve #3 pos to 50.00% and command to 1 (open)" />
+         <input type="button" onclick='setSmValve3RuntimeDataClose()' value="Set Valve #3 pos to 0.01% and command to 2 (close)" />
+         <br>
+         <input type="button" onclick='setSmPump1RuntimeDataStart()' value="Set Pump #1 setpoint to 100.00% and command to 1 (start)" />
+         <input type="button" onclick='setSmPump1RuntimeDataStop()' value="Set Pump #1 setpointto 0.00% and command to 2 (stop)" />
+         <br>
+         <input type="button" onclick='setSmPump2RuntimeDataStart()' value="Set Pump #2 setpoint to 100.00% and command to 1 (start)" />
+         <input type="button" onclick='setSmPump2RuntimeDataStop()' value="Set Pump #2 setpointto 0.00% and command to 2 (stop)" />
+		 <br>
+		 <input type="button" onclick='getSmAllValvesSetupData()' value="Get all valves setup data from cache" />
+		 <input type="button" onclick='getSmAllPumpsSetupData()' value="Get all pump setup data from cache" />
+         <br>
+		 <input type="button" onclick='setSmPumpAlarmSetup()' value="Setup alarm" />
+		 <input type="button" onclick='setSmPumpAlarmTrig()' value="Trig alarm" />
+		 <input type="button" onclick='setSmPumpAlarmReset()' value="Reset alarm" />
+         <br>
+         <br>
+    </p>
+    </div>
+    </div>
+		 <h3>CLIENT SENT:</h3>
+         <p id="clientSent"></p> 
+	</div>
+		 <h3>SERVER REPLY:</h3>
+         <p id="serverReply"></p> 
+</body>
+</html>
